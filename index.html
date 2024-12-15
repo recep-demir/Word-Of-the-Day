@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word and Saying of the Day</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #333;
+            color: white;
+            width: 25%;
+        }
+        h1 {
+            color: #333;
+        }
+        .feed {
+            margin-bottom: 40px;
+        }
+        .item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .item a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: white;">Word and Saying of the Day</h1>
+    <div id="rss-feed"></div>
+
+    <script>
+        // RSS içerikleri
+        const rssData1 = `
+        <rss version="2.0">
+            <channel>
+                <title>Phrasal Verb of the Day | Vocabulary | EnglishClub</title>
+                <link>https://www.englishclub.com/vocabulary/word-of-the-day.htm</link>
+                <description>Phrasal Verb of the Day RSS</description>
+                <language>en-us</language>
+                <copyright>(c) 2024</copyright>
+                <item>
+                    <title>knock out (3)</title>
+                    <description>If you knock somebody out of a competition, they cannot continue because you've defeated them.</description>
+                    <link>https://www.englishclub.com/ref/esl/Phrasal_Verbs/K/knock_out_3__2431.php</link>
+                    <pubDate>Sun, 15 Dec 2024 00:00:00 GMT</pubDate>
+                    <guid isPermaLink="false">https://www.englishclub.com/ref/esl/Phrasal_Verbs/K/knock_out_3__2431.php</guid>
+                </item>
+            </channel>
+        </rss>`;
+
+        const rssData2 = `
+        <rss version="2.0">
+            <channel>
+                <title>Saying of the Day | Vocabulary | EnglishClub</title>
+                <link>https://www.englishclub.com/vocabulary/word-of-the-day.htm</link>
+                <description>Saying of the Day RSS</description>
+                <language>en-us</language>
+                <copyright>(c) 2024</copyright>
+                <item>
+                    <title>He that complies against his will, is of his own opinion still</title>
+                    <description>If you force someone to do something or agree with something, it doesn't mean that they really agree.</description>
+                    <link>https://www.englishclub.com/ref/esl/Sayings/Quizzes/Mixed_6/He_that_complies_against_his_will_is_of_his_own_opinion_still_958.php</link>
+                    <pubDate>Sun, 15 Dec 2024 00:00:00 GMT</pubDate>
+                    <guid isPermaLink="false">https://www.englishclub.com/ref/esl/Sayings/Quizzes/Mixed_6/He_that_complies_against_his_will_is_of_his_own_opinion_still_958.php</guid>
+                </item>
+            </channel>
+        </rss>`;
+
+        // XML parse etme ve sayfaya ekleme
+        const parser = new DOMParser();
+        const feeds = [rssData1, rssData2]; // RSS verilerini bir araya getirin
+        const rssFeedDiv = document.getElementById("rss-feed");
+
+        feeds.forEach(rssData => {
+            const xml = parser.parseFromString(rssData, "text/xml");
+            const channel = xml.querySelector("channel");
+            const items = channel.querySelectorAll("item");
+
+            items.forEach(item => {
+                const title = item.querySelector("title").textContent;
+                const description = item.querySelector("description").textContent;
+                const link = item.querySelector("link").textContent;
+                const pubDate = item.querySelector("pubDate").textContent;
+
+                rssFeedDiv.innerHTML += `
+                    <div class="item">
+                        <h3>${title}</h3>
+                        <p>${description}</p>
+                        <a href="${link}" target="_blank">Read more</a>
+                        <p><small>Published on: ${pubDate}</small></p>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
